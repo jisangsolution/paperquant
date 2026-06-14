@@ -1,0 +1,61 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>변동성 타겟팅이 최대낙폭을 절반으로 줄인 수학 — PaperQuant</title>
+<meta name="description" content="우리는 크립토에서 &quot;대박 엣지&quot;를 찾지 못했습니다. 수십 개 가설을 정직하게 검증한 결론은 약한 추세추종 하나뿐이었고, 그마저 통계적으로 얄팍했습니다. 그런데 —…">
+<link rel="canonical" href="https://paperquant.com/posts/volatility-targeting-math.html">
+<meta property="og:type" content="article"><meta property="og:title" content="변동성 타겟팅이 최대낙폭을 절반으로 줄인 수학 — PaperQuant">
+<meta property="og:description" content="우리는 크립토에서 &quot;대박 엣지&quot;를 찾지 못했습니다. 수십 개 가설을 정직하게 검증한 결론은 약한 추세추종 하나뿐이었고, 그마저 통계적으로 얄팍했습니다. 그런데 —…"><meta property="og:url" content="https://paperquant.com/posts/volatility-targeting-math.html">
+<meta property="og:site_name" content="PaperQuant">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head><body><header class="site-head"><div class="wrap">
+<div class="brand"><a href="/">Paper<b>Quant</b></a></div>
+<nav class="nav"><a href="/">일지</a><a href="/about.html">소개</a></nav>
+</div></header><main class="wrap"><article class="article">
+<div class="eyebrow">연구 노트 · 2026-06-15</div>
+<h1>변동성 타겟팅이 최대낙폭을 절반으로 줄인 수학</h1>
+<div class="strip"><span class="dot">●</span>모의투자 기록 · 투자자문 아님 · 수익 보장 없음</div>
+<div class="article-body"><p>우리는 크립토에서 "대박 엣지"를 찾지 못했습니다. 수십 개 가설을 정직하게 검증한 결론은 <em>약한 추세추종 하나</em>뿐이었고, 그마저 통계적으로 얄팍했습니다. 그런데 — 엣지를 <em>키울</em> 수는 없어도, <strong>리스크를 절반으로 줄이는 것</strong>은 가능했습니다. 그것도 레버리지 없이, 순수하게 <em>수학</em>으로.</p>
+<p>이 글은 그 방법, <strong>변동성 타겟팅(volatility targeting)</strong>의 원리와 우리 실측 결과를 풀어씁니다.</p>
+<h2>문제: "똑같이 나눠 담으면" 위험은 똑같지 않다</h2>
+<p>10종목에 자본을 균등하게 1/10씩 담았다고 합시다. 돈은 똑같이 나눴지만 — <strong>위험은 전혀 균등하지 않습니다.</strong> 변동성이 큰 코인 하나가 포트폴리오 전체의 등락을 좌우합니다. <em>돈</em>은 동일가중이어도 <em>위험</em>은 가장 사나운 자산에 쏠립니다.</p>
+<p>이게 동일가중(equal weight)의 함정입니다. 조용한 자산은 묻히고, 사나운 자산이 포트폴리오를 흔듭니다.</p>
+<h2>1단계: 역변동성 사이징 — "위험을 균등하게"</h2>
+<p>해법은 단순합니다. <strong>변동성이 큰 자산은 작게, 작은 자산은 크게</strong> 담습니다. 각 자산의 비중을 그 자산의 변동성에 <em>반비례</em>시키는 것 — 역변동성(inverse volatility) 사이징입니다.</p>
+<p>직관: 사나운 코인은 조금만 담아도 충분히 위험을 기여하고, 얌전한 코인은 많이 담아야 같은 만큼 기여합니다. 이렇게 하면 <em>돈</em>이 아니라 <em>위험</em>이 고르게 분산됩니다. 한 자산의 사고가 포트폴리오를 통째로 무너뜨리지 못합니다.</p>
+<h2>2단계: 포트폴리오 변동성 타겟 — "전체 진폭에 상한을"</h2>
+<p>여기서 한 걸음 더 나아갑니다. 포트폴리오 <em>전체</em>의 예상 변동성을 계산하고, 그것이 목표치(예: 연 10%)를 넘으면 <strong>전체 노출을 비례 축소</strong>합니다. 시장이 사나우면 자동으로 발을 빼고, 잠잠하면 정상 노출. 단, <strong>총노출은 100%를 넘지 않게(무레버리지)</strong> 묶습니다.</p>
+<p>결과적으로 포트폴리오는 <em>일정한 진폭</em>으로 움직이려 합니다. 폭풍에는 작게, 잔잔할 때는 평소대로.</p>
+<h2>실측: 위험이 절반으로</h2>
+<p>우리의 4년치 검증에서, 같은 추세추종 신호에 이 두 단계를 적용했더니:</p>
+<ul>
+<li><strong>연 변동성</strong>: 약 48% → <strong>약 22~28%</strong> (대략 절반)</li>
+<li><strong>최대낙폭(MDD)</strong>: 약 53~64% → <strong>약 29~33%</strong> (대략 절반)</li>
+<li><strong>위험조정성과(Sharpe)</strong>: 유지 또는 소폭 개선</li>
+<li><strong>레버리지</strong>: 0 (총노출 100% 이하 유지)</li>
+</ul>
+<p>수익(CAGR)을 키운 게 아닙니다. <em>흔들림과 낙폭을 반으로</em> 줄였습니다. 같은 엔진, 같은 신호인데 <strong>훨씬 덜 위험한</strong> 포트폴리오가 됐습니다.</p>
+<h2>왜 "낙폭 절반"이 생각보다 훨씬 중요한가</h2>
+<p>여기 잔인한 비대칭이 있습니다. <strong>낙폭에서 회복하는 데 필요한 수익은, 낙폭보다 훨씬 큽니다.</strong></p>
+<ul>
+<li><span class="num-down">-50%</span> 손실 → 본전까지 <strong><span class="num-up">+100%</span></strong> 필요</li>
+<li><span class="num-down">-30%</span> 손실 → 본전까지 <strong><span class="num-up">+43%</span></strong> 필요</li>
+<li><span class="num-down">-20%</span> 손실 → 본전까지 <strong><span class="num-up">+25%</span></strong> 필요</li>
+</ul>
+<p>즉 최대낙폭을 50%대에서 30%대로 낮추면, <em>회복 부담이 <span class="num-up">+100%</span>에서 <span class="num-up">+43%</span>로</em> 줄어듭니다. 살아남아 복리를 이어갈 확률이 근본적으로 달라집니다. 특히 <strong>시드가 작을수록</strong> — 한 번의 큰 낙폭이 곧 게임 오버이기에 — 이 수학은 생존의 문제가 됩니다.</p>
+<h2>정직한 한계 — 이건 연금술이 아니다</h2>
+<p>분명히 합니다. 변동성 타겟팅은 <strong>없는 엣지를 만들어내지 않습니다.</strong> 음의 기대값을 양으로 바꾸지도 못합니다. 그것은 <em>수익 엔진</em>이 아니라 <em>리스크 엔진</em>입니다. 우리의 추세추종 엣지는 여전히 얄팍하고, 이 기법은 그 얄팍한 엣지를 <em>덜 위험하게</em> 운반할 뿐입니다.</p>
+<p>하지만 작은 자본으로 시장에서 <em>오래 살아남는</em> 게 목표라면 — 안 죽는 게 먼저입니다. 화려한 수익률보다, <strong>흔들려도 무너지지 않는 구조</strong>가 길게 보면 이깁니다. 그게 우리가 이 지루한 수학에 집착하는 이유입니다.</p>
+<hr />
+<blockquote>
+<p>⚠️ 본 글은 <strong>교육·연구 목적</strong>이며 특정 종목·매매를 권유하지 않습니다. 투자자문이 아니며, 모든 투자 책임은 본인에게 있습니다. 수치는 공개 시세 기반 백테스트로 미래 수익을 약속하지 않습니다.</p>
+</blockquote></div>
+
+<div class="tags">#리스크관리 #변동성타겟팅 #포트폴리오 #최대낙폭 #퀀트 #자산배분 #복리 #투자공부</div>
+<a class="back" href="/">← 전체 일지로</a>
+</article></main><footer class="site-foot"><div class="wrap">
+모의투자 기록 · 투자자문 아님 · 수익 보장 없음<br>
+© 2026 지상솔루션주식회사 · PaperQuant · <a href="/about.html">소개·면책</a> · <a href="/rss.xml">RSS</a><br>
+본 사이트의 모든 기록은 모의투자(페이퍼 트레이딩) 연구 자료이며 투자자문이 아닙니다.
+</div></footer></body></html>
